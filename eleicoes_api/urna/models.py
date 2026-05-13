@@ -5,6 +5,7 @@ from django.core.exceptions import ValidationError
 
 class Eleitor(models.Model):
     nome = models.CharField(max_length=100)
+    email = models.EmailField(unique=True)
     cpf = models.CharField(max_length=14, unique=True)
     data_nascimento = models.DateField()
     ativo = models.BooleanField(default=True)
@@ -48,6 +49,15 @@ class Eleicao(models.Model):
     def clean(self):
         if self.data_inicio >= self.data_fim:
             raise ValidationError('A data de início deve ser antes da data de fim.')
+        
+        if self.pk:
+            eleicao_atual = Eleicao.objects.get(pk=self.pk)
+            if self.status != eleicao_atual.status:
+                fluxo = ['rascunho', 'aberta', 'encerrada', 'apurada']
+                status_atual = fluxo.index(eleicao_atual.status)
+                novo_status = fluxo.index(self.status)
+                if novo_status != status_atual + 1:
+                    raise ValidationError('O fluxo é: rascunho > aberta > encerrada > apurada e não pode voltar ou pular etapas.')
         
 class Candidato(models.Model):
     eleicao = models.ForeignKey(
@@ -94,6 +104,13 @@ class RegistroVotacao(models.Model):
     )
     data_hora = models.DateTimeField(auto_now_add=True)
     
+    class Meta:
+        unique_together = [('eleitor', 'eleicao')]
+
+    def __str__(self):
+        return f'{self.eleitor.nome} votou em {self.eleicao.titulo} em {self.data_hora}'
+        
+    
 class Voto(models.Model):
     eleicao = models.ForeignKey(
         Eleicao,
@@ -111,3 +128,10 @@ class Voto(models.Model):
     em_branco = models.BooleanField(default=False)
     data_hora = models.DateTimeField(auto_now_add=True)
     comprovante_hash = models.CharField(max_length=64, unique=True)
+    
+    def clean(self):
+        if self.em_branco and self.candidato is not None:
+            raise ValidationError('Voto em branco não pode ter candidato.')
+        if not self.em_branco and self.candidato is None:
+            raise ValidationError('Voto em branco não pode ter candidato.')
+        
