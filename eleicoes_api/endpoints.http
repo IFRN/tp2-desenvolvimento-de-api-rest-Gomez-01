@@ -1,0 +1,339 @@
+### Configuração
+@baseUrl = http://127.0.0.1:8000/api
+@contentType = application/json
+
+###
+# ===================================
+# ELEITORES
+# ===================================
+
+### Listar todos os eleitores
+GET {{baseUrl}}/eleitores/
+Accept: {{contentType}}
+
+### Listar eleitores ativos
+GET {{baseUrl}}/eleitores/?ativo=true
+Accept: {{contentType}}
+
+### Buscar eleitor por nome
+GET {{baseUrl}}/eleitores/?search=João
+Accept: {{contentType}}
+
+### Buscar eleitor por CPF
+GET {{baseUrl}}/eleitores/?search=123.456.789-00
+Accept: {{contentType}}
+
+### Criar novo eleitor
+POST {{baseUrl}}/eleitores/
+Content-Type: {{contentType}}
+
+{
+  "nome": "João Silva",
+  "email": "joao.silva@example.com",
+  "cpf": "123.456.789-00",
+  "data_nascimento": "1990-05-15",
+  "ativo": true
+}
+
+### Criar outro eleitor
+POST {{baseUrl}}/eleitores/
+Content-Type: {{contentType}}
+
+{
+  "nome": "Maria Santos",
+  "email": "maria.santos@example.com",
+  "cpf": "987.654.321-00",
+  "data_nascimento": "1995-03-20",
+  "ativo": true
+}
+
+### Criar eleitor inativo
+POST {{baseUrl}}/eleitores/
+Content-Type: {{contentType}}
+
+{
+  "nome": "Carlos Oliveira",
+  "email": "carlos@example.com",
+  "cpf": "456.789.123-45",
+  "data_nascimento": "1985-07-10",
+  "ativo": false
+}
+
+### Obter eleitor por ID
+GET {{baseUrl}}/eleitores/1/
+Accept: {{contentType}}
+
+### Atualizar eleitor
+PUT {{baseUrl}}/eleitores/1/
+Content-Type: {{contentType}}
+
+{
+  "nome": "João Silva Santos",
+  "email": "joao.silva@example.com",
+  "cpf": "123.456.789-00",
+  "data_nascimento": "1990-05-15",
+  "ativo": true
+}
+
+### Deletar eleitor
+DELETE {{baseUrl}}/eleitores/1/
+
+###
+# ===================================
+# ELEIÇÕES
+# ===================================
+
+### Listar todas as eleições
+GET {{baseUrl}}/eleicoes/
+Accept: {{contentType}}
+
+### Listar eleições por status
+GET {{baseUrl}}/eleicoes/?status=aberta
+Accept: {{contentType}}
+
+### Listar eleições por tipo
+GET {{baseUrl}}/eleicoes/?tipo=estudantil
+Accept: {{contentType}}
+
+### Buscar eleição por título
+GET {{baseUrl}}/eleicoes/?search=Estudantil
+Accept: {{contentType}}
+
+### Ordenar eleições por data de início
+GET {{baseUrl}}/eleicoes/?ordering=-data_inicio
+Accept: {{contentType}}
+
+### Criar nova eleição
+POST {{baseUrl}}/eleicoes/
+Content-Type: {{contentType}}
+
+{
+  "titulo": "Eleição Estudantil 2026",
+  "descricao": "Eleição para presidente do centro acadêmico",
+  "tipo": "estudantil",
+  "data_inicio": "2026-05-15T09:00:00Z",
+  "data_fim": "2026-05-15T17:00:00Z",
+  "status": "rascunho",
+  "permite_branco": true,
+  "criada_por": 1
+}
+
+### Criar eleição sindical
+POST {{baseUrl}}/eleicoes/
+Content-Type: {{contentType}}
+
+{
+  "titulo": "Eleição Sindical 2026",
+  "descricao": "Eleição para diretoria sindical",
+  "tipo": "sindical",
+  "data_inicio": "2026-06-01T08:00:00Z",
+  "data_fim": "2026-06-01T18:00:00Z",
+  "status": "rascunho",
+  "permite_branco": true,
+  "criada_por": 2
+}
+
+### Obter eleição por ID
+GET {{baseUrl}}/eleicoes/1/
+Accept: {{contentType}}
+
+### Atualizar eleição (abrir para votação)
+PUT {{baseUrl}}/eleicoes/1/
+Content-Type: {{contentType}}
+
+{
+  "titulo": "Eleição Estudantil 2026",
+  "descricao": "Eleição para presidente do centro acadêmico",
+  "tipo": "estudantil",
+  "data_inicio": "2026-05-15T09:00:00Z",
+  "data_fim": "2026-05-15T17:00:00Z",
+  "status": "aberta",
+  "permite_branco": true,
+  "criada_por": 1
+}
+
+### Deletar eleição
+DELETE {{baseUrl}}/eleicoes/1/
+
+###
+# ===================================
+# CANDIDATOS
+# ===================================
+
+### Listar todos os candidatos
+GET {{baseUrl}}/candidatos/
+Accept: {{contentType}}
+
+### Filtrar candidatos por nome
+GET {{baseUrl}}/candidatos/?nome=Maria
+Accept: {{contentType}}
+
+### Filtrar candidatos por partido/chapa
+GET {{baseUrl}}/candidatos/?partido_ou_chapa=Chapa%20A
+Accept: {{contentType}}
+
+### Criar novo candidato
+POST {{baseUrl}}/candidatos/
+Content-Type: {{contentType}}
+
+{
+  "eleicao": 1,
+  "numero": 1,
+  "nome": "Maria Santos",
+  "nome_urna": "Maria",
+  "partido_ou_chapa": "Chapa A",
+  "proposta": "Proposta para melhorar infraestrutura do centro acadêmico",
+  "foto_url": "https://example.com/maria.jpg"
+}
+
+### Criar segundo candidato
+POST {{baseUrl}}/candidatos/
+Content-Type: {{contentType}}
+
+{
+  "eleicao": 1,
+  "numero": 2,
+  "nome": "João Silva",
+  "nome_urna": "João",
+  "partido_ou_chapa": "Chapa B",
+  "proposta": "Proposta para aumentar eventos acadêmicos",
+  "foto_url": "https://example.com/joao.jpg"
+}
+
+### Criar terceiro candidato
+POST {{baseUrl}}/candidatos/
+Content-Type: {{contentType}}
+
+{
+  "eleicao": 1,
+  "numero": 3,
+  "nome": "Carlos Oliveira",
+  "nome_urna": "Carlos",
+  "partido_ou_chapa": "Chapa C",
+  "proposta": "Proposta para modernizar instalações",
+  "foto_url": "https://example.com/carlos.jpg"
+}
+
+### Obter candidato por ID
+GET {{baseUrl}}/candidatos/1/
+Accept: {{contentType}}
+
+### Atualizar candidato
+PUT {{baseUrl}}/candidatos/1/
+Content-Type: {{contentType}}
+
+{
+  "eleicao": 1,
+  "numero": 1,
+  "nome": "Maria Santos Silva",
+  "nome_urna": "Maria",
+  "partido_ou_chapa": "Chapa A",
+  "proposta": "Proposta atualizada",
+  "foto_url": "https://example.com/maria.jpg"
+}
+
+### Deletar candidato
+DELETE {{baseUrl}}/candidatos/1/
+
+###
+# ===================================
+# APTIDÃO DE ELEITORES
+# ===================================
+
+### Listar todas as aptidões
+GET {{baseUrl}}/aptidao-eleitor/
+Accept: {{contentType}}
+
+### Filtrar aptidões por eleição
+GET {{baseUrl}}/aptidao-eleitor/?eleicao=1
+Accept: {{contentType}}
+
+### Filtrar aptidões por eleitor
+GET {{baseUrl}}/aptidao-eleitor/?eleitor=1
+Accept: {{contentType}}
+
+### Adicionar eleitor à eleição (aptidão)
+POST {{baseUrl}}/aptidao-eleitor/
+Content-Type: {{contentType}}
+
+{
+  "eleitor": 1,
+  "eleicao": 1
+}
+
+### Adicionar segundo eleitor à eleição
+POST {{baseUrl}}/aptidao-eleitor/
+Content-Type: {{contentType}}
+
+{
+  "eleitor": 2,
+  "eleicao": 1
+}
+
+### Adicionar terceiro eleitor à eleição
+POST {{baseUrl}}/aptidao-eleitor/
+Content-Type: {{contentType}}
+
+{
+  "eleitor": 3,
+  "eleicao": 1
+}
+
+### Obter aptidão por ID
+GET {{baseUrl}}/aptidao-eleitor/1/
+Accept: {{contentType}}
+
+### Deletar aptidão (remover eleitor da eleição)
+DELETE {{baseUrl}}/aptidao-eleitor/1/
+
+###
+# ===================================
+# VOTOS
+# ===================================
+
+### Listar todos os votos
+GET {{baseUrl}}/votos/
+Accept: {{contentType}}
+
+### Filtrar votos por eleição
+GET {{baseUrl}}/votos/?eleicao=1
+Accept: {{contentType}}
+
+### Obter voto por ID
+GET {{baseUrl}}/votos/1/
+Accept: {{contentType}}
+
+###
+# ===================================
+# REGISTRO DE VOTAÇÃO
+# ===================================
+
+### Listar todos os registros de votação
+GET {{baseUrl}}/registro-votacao/
+Accept: {{contentType}}
+
+### Filtrar registros por eleição
+GET {{baseUrl}}/registro-votacao/?eleicao=1
+Accept: {{contentType}}
+
+### Ordenar registros por data (mais recentes)
+GET {{baseUrl}}/registro-votacao/?ordering=-data_hora
+Accept: {{contentType}}
+
+### Obter registro de votação por ID
+GET {{baseUrl}}/registro-votacao/1/
+Accept: {{contentType}}
+
+###
+# ===================================
+# DOCUMENTAÇÃO
+# ===================================
+
+### Acessar Swagger UI
+GET http://127.0.0.1:8000/swagger/
+
+### Acessar ReDoc
+GET http://127.0.0.1:8000/redoc/
+
+### Obter schema OpenAPI
+GET http://127.0.0.1:8000/swagger/?format=openapi
