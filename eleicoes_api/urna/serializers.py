@@ -64,8 +64,8 @@ class VotoSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Voto
-        fields = ['id','eleicao','candidato','candidato_nome_urna','em_branco','em_branco_display', 'data_voto']
-        read_only_fields = ['id', 'eleicao', 'candidato', 'em_branco', 'data_voto']
+        fields = ['id','eleicao','candidato','candidato_nome_urna','em_branco','em_branco_display', 'data_hora']
+        read_only_fields = ['id', 'eleicao', 'candidato', 'em_branco', 'data_hora']
 
     def get_em_branco_display(self, obj):
         return 'BRANCO' if obj.em_branco else None
